@@ -9,48 +9,28 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
-import com.example.daiverandresdoria.seccion_11_navigator_drawer.Fragments.AlertsFragment;
-import com.example.daiverandresdoria.seccion_11_navigator_drawer.Fragments.EmailFragment;
-import com.example.daiverandresdoria.seccion_11_navigator_drawer.Fragments.InfoFragment;
+import com.example.daiverandresdoria.seccion_11_navigator_drawer.Fragments.StudentsAddFragment;
+import com.example.daiverandresdoria.seccion_11_navigator_drawer.Fragments.StudentsListFragment;
+import com.example.daiverandresdoria.seccion_11_navigator_drawer.Funcions.ConexionSQLiteHelper;
 import com.example.daiverandresdoria.seccion_11_navigator_drawer.R;
 
 public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //config database
+        ConexionSQLiteHelper connect = new ConexionSQLiteHelper(this, "bd_student", null,1);
+        //app start
         setToolbar();
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navView);
         setDefoultFragment();
-
-        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
-            @Override
-            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-
-            }
-
-            @Override
-            public void onDrawerOpened(@NonNull View drawerView) {
-                Toast.makeText(MainActivity.this,"Open",Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onDrawerClosed(@NonNull View drawerView) {
-                Toast.makeText(MainActivity.this,"Close",Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onDrawerStateChanged(int newState) {
-
-            }
-        });
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -59,20 +39,13 @@ public class MainActivity extends AppCompatActivity {
                 Fragment fragment = null;
 
                 switch (item.getItemId()){
-                    case R.id.menu_email:
-                        fragment = new EmailFragment();
+                    case R.id.menu_list:
+                        fragment = new StudentsListFragment();
                         fragmentTransaction = true;
                         break;
-                    case R.id.menu_alert:
-                        fragment = new AlertsFragment();
+                    case R.id.menu_add:
+                        fragment = new StudentsAddFragment();
                         fragmentTransaction = true;
-                        break;
-                    case R.id.menu_info:
-                        fragment = new InfoFragment();
-                        fragmentTransaction = true;
-                        break;
-                    case R.id.menu_option_1:
-                        Toast.makeText(MainActivity.this,"hello",Toast.LENGTH_SHORT).show();
                         break;
                 }
                 if (fragmentTransaction){
@@ -94,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setDefoultFragment(){
         MenuItem item = navigationView.getMenu().getItem(0);
-        Fragment fragment = new EmailFragment();
+        Fragment fragment = new StudentsListFragment();
         changeFragment(fragment,item);
     }
 
